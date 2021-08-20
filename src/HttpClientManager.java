@@ -12,7 +12,7 @@ import java.util.List;
 
 public class HttpClientManager {
     private String url;
-    private String response;
+
     JsonManager jsonManager;
 
     public HttpClientManager(String url) {
@@ -21,16 +21,18 @@ public class HttpClientManager {
     }
 
     public User getUserById(long id) throws Exception {
-       /* List<User> userList = getAllUsers();
-        if (getMaxId() >= id) {
-            return userList.stream().filter((x) -> x.getId() == id).findFirst().get();
-        } else return null;*/
-        return  jsonManager.getObjectFromJson(getResponse(url + "/users/" + id).body(),User.class);
+        String response = getResponse(url + "/users/" + id).body();
+        if(response.equals("{}"))
+            return null;
+        return  jsonManager.getObjectFromJson(response,User.class);
     }
 
-    public User getUserByUserName(String name) throws Exception {
-        List<User> userList = getAllUsers();
-        return userList.stream().filter((x) -> x.getUsername().equals(name)).findFirst().get();
+    public ArrayList<User> getUserByUserName(String username) throws Exception {
+        String response = getResponse(url + "/users?username=" + username).body();
+        System.out.println(response);
+        if(response.equals("{}"))
+            return null;
+        return jsonManager.getAllFromJson(response,Users.class);
     }
 
     public ArrayList<User> getAllUsers() throws Exception {
@@ -52,9 +54,9 @@ public class HttpClientManager {
 
     public int deleteUser() throws Exception {
         HttpClient client = HttpClient.newHttpClient();
+        String correctUrl = url + "/posts/1";
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(url))
-                .header("Content-Type", "application/json")
+                .uri(URI.create(correctUrl))
                 .DELETE().build();
         HttpResponse<String> resp = client.send(request, HttpResponse.BodyHandlers.ofString());
         return resp.statusCode();
@@ -62,9 +64,10 @@ public class HttpClientManager {
 
     public void postNewUser(User user) throws Exception {
         String json = jsonManager.ConvertUserToJson(user);
+        String correctUrl = url + "/users";
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(url))
+                .uri(URI.create(correctUrl))
                 .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(json)).build();
         HttpResponse<String> resp = client.send(request, HttpResponse.BodyHandlers.ofString());
@@ -73,9 +76,10 @@ public class HttpClientManager {
 
     public void updateUser(User user) throws Exception {
         String json = jsonManager.ConvertUserToJson(user);
+        String correctUrl = url + "/posts/1";
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(url))
+                .uri(URI.create(correctUrl))
                 .header("Content-Type", "application/json")
                 .PUT(HttpRequest.BodyPublishers.ofString(json)).build();
         HttpResponse<String> resp = client.send(request, HttpResponse.BodyHandlers.ofString());

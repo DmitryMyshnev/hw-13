@@ -19,7 +19,7 @@ public class JsonManager{
         return  new Gson().fromJson(json, type);
     }
     public <T> T getObjectFromJson(String json, Type type){
-        return  new Gson().fromJson(json,type);
+        return new Gson().fromJson(json,type);
     }
 
     public String ConvertUserToJson(Object o){

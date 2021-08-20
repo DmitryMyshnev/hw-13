@@ -17,25 +17,26 @@ public class Main {
 //       User user = manager.getUserByUserName("Bret");
 //        System.out.println(user.getName());
         //  Long id = manager.getMaxId();
-        User newUser = new User(1, "John",
+        User newUser = new User(0, "John",
                 "JohnWick",
                 " Wick@mail.com",
                 new Address("Wall St", "Apt. 1", "New York", "13258-65", new Geo(40.707691106420995, -74.01160424999983)),
                 "+12124033990",
                 "onewallstreet.com",
-                new Company("onewallstreet", "Love going there for a coffee", "Love going there for a coffee"));
+                new Company("onewallstreet", "Love going there for a coffee", "We have already covered basics of Functional"));
 
         //manager.updateUser(newUser);
        // manager.postNewUser(newUser);
-        // System.out.println(manager.deleteUserById());
-        ArrayList<User> user = manager.getAllUsers();
+         //System.out.println(manager.deleteUser());
+      /*  ArrayList<User> user = manager.getAllUsers();
         for (User p : user) {
             System.out.println(p.toString());
-        }
+        }*/
 
          //List<User> user = manager.getAllUsers();
 
-        //System.out.println(manager.getUserById(4).toString());
+      // System.out.println(manager.getUserByUserName("Samantha").toString());
+       //System.out.println(manager.getUserById(2).toString());
         // System.out.println( manager.getMaxId().toString());
     }
 }
