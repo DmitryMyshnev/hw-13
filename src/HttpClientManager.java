@@ -47,7 +47,6 @@ public class HttpClientManager {
     }
 
 
-
     public int deleteUser() throws Exception {
         String correctUrl = url + "/posts/1";
         return getResponse(correctUrl).statusCode();
@@ -56,13 +55,13 @@ public class HttpClientManager {
     public void postNewUser(User user) throws Exception {
         String json = jsonManager.ConvertUserToJson(user);
         String correctUrl = url + "/users";
-        System.out.println(postResponse(correctUrl, json,"POST").body());
+        System.out.println(postResponse(correctUrl, json, "POST").body());
     }
 
     public void updateUser(User user) throws Exception {
         String json = jsonManager.ConvertUserToJson(user);
         String correctUrl = url + "/posts/1";
-        System.out.println(postResponse(correctUrl,json,"PUT").body());
+        System.out.println(postResponse(correctUrl, json, "PUT").body());
     }
 
     public ArrayList<Comment> getAllCommentsFromPostByUserId(Long userId) throws Exception {
@@ -86,6 +85,7 @@ public class HttpClientManager {
         }
         return lists;
     }
+
     private HttpResponse<String> getResponse(String url) throws Exception {
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
@@ -94,7 +94,7 @@ public class HttpClientManager {
         return client.send(request, HttpResponse.BodyHandlers.ofString());
     }
 
-    private HttpResponse<String> postResponse(String url, String json,String method) throws Exception {
+    private HttpResponse<String> postResponse(String url, String json, String method) throws Exception {
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url))
