@@ -1,12 +1,10 @@
 import PostsByUser.Post;
-import PostsByUser.Posts;
 import Users.Address;
 import Users.Company;
 import Users.Geo;
 import Users.User;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class Main {
     static final String url = "https://jsonplaceholder.typicode.com";
@@ -24,12 +22,16 @@ public class Main {
                 "+12124033990",
                 "onewallstreet.com",
                 new Company("onewallstreet", "Love going there for a coffee", "We have already covered basics of Functional"));
-
+          manager.getAllCommentsFromPostByUserId(5L);
         //manager.updateUser(newUser);
        // manager.postNewUser(newUser);
          //System.out.println(manager.deleteUser());
       /*  ArrayList<User> user = manager.getAllUsers();
         for (User p : user) {
+            System.out.println(p.toString());
+        }*/
+        /*   ArrayList<Post> posts = manager.getAllPostsFromUserId(4);
+        for (Post p : posts) {
             System.out.println(p.toString());
         }*/
 

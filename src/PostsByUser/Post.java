@@ -54,4 +54,10 @@ public class Post {
                 "body= " + body + '\n' +
                 '}';
     }
+
+    public static int compare(Post post1, Post post2) {
+        if(post1.getId() > post2.getId())
+            return 1;
+        return -1;
+    }
 }

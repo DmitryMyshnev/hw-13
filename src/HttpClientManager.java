@@ -1,8 +1,13 @@
+import Comments.Coment;
+import Comments.Coments;
 import Json.JsonManager;
 import PostsByUser.Post;
+import PostsByUser.Posts;
 import Users.User;
 import Users.Users;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -12,31 +17,32 @@ import java.util.List;
 
 public class HttpClientManager {
     private String url;
-
     JsonManager jsonManager;
+    private String filePath;
 
     public HttpClientManager(String url) {
         this.url = url;
         jsonManager = new JsonManager();
+        filePath = "src\\Comments\\comment.txt";
     }
 
     public User getUserById(long id) throws Exception {
         String response = getResponse(url + "/users/" + id).body();
-        if(response.equals("{}"))
+        if (response.equals("{}"))
             return null;
-        return  jsonManager.getObjectFromJson(response,User.class);
+        return jsonManager.getObjectFromJson(response, User.class);
     }
 
     public ArrayList<User> getUserByUserName(String username) throws Exception {
         String response = getResponse(url + "/users?username=" + username).body();
         System.out.println(response);
-        if(response.equals("{}"))
+        if (response.equals("{}"))
             return null;
-        return jsonManager.getAllFromJson(response,Users.class);
+        return jsonManager.getAllFromJson(response, Users.class);
     }
 
     public ArrayList<User> getAllUsers() throws Exception {
-        return jsonManager.getAllFromJson(getResponse(url +"/users").body(), Users.class);
+        return jsonManager.getAllFromJson(getResponse(url + "/users").body(), Users.class);
     }
 
     private HttpResponse<String> getResponse(String url) throws Exception {
@@ -85,8 +91,23 @@ public class HttpClientManager {
         HttpResponse<String> resp = client.send(request, HttpResponse.BodyHandlers.ofString());
         System.out.println(resp.body());
     }
-public List<Post> getAllPosts() throws  Exception{
-        return jsonManager.getAllFromJson(getResponse(url +"/posts").body(),Post.class);
-}
+
+    public ArrayList<Coment> getAllCommentsFromPostByUserId(Long userId) throws Exception {
+        ArrayList<Post> posts = getAllPostsFromUserId(userId);
+        Long maxPostId = posts.stream().max(Post::compare).get().getId();
+        ArrayList<Coment> coments = jsonManager.getAllFromJson(getResponse(url + "/posts/" + maxPostId + "/comments").body(), Coments.class);
+        try (FileOutputStream writeFile = new FileOutputStream(filePath,true)) {
+           byte[] buffer = coments.get(0).getBody().getBytes();
+           writeFile.write(buffer,0,buffer.length);
+        }
+        catch (IOException e){
+            System.out.println(e.getMessage());
+        }
+        return coments;
+    }
+
+    public ArrayList<Post> getAllPostsFromUserId(long id) throws Exception {
+        return jsonManager.getAllFromJson(getResponse(url + "/users/" + id + "/posts").body(), Posts.class);
+    }
 
 }
