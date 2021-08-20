@@ -1,5 +1,5 @@
-import Comments.Coment;
-import Comments.Coments;
+import Comments.Comment;
+import Comments.Comments;
 import Json.JsonManager;
 import PostsByUser.Post;
 import PostsByUser.Posts;
@@ -23,7 +23,7 @@ public class HttpClientManager {
     public HttpClientManager(String url) {
         this.url = url;
         jsonManager = new JsonManager();
-        filePath = "src\\Comments\\comment.txt";
+        filePath = "src\\Comments\\";
     }
 
     public User getUserById(long id) throws Exception {
@@ -92,18 +92,13 @@ public class HttpClientManager {
         System.out.println(resp.body());
     }
 
-    public ArrayList<Coment> getAllCommentsFromPostByUserId(Long userId) throws Exception {
+    public ArrayList<Comment> getAllCommentsFromPostByUserId(Long userId) throws Exception {
         ArrayList<Post> posts = getAllPostsFromUserId(userId);
         Long maxPostId = posts.stream().max(Post::compare).get().getId();
-        ArrayList<Coment> coments = jsonManager.getAllFromJson(getResponse(url + "/posts/" + maxPostId + "/comments").body(), Coments.class);
-        try (FileOutputStream writeFile = new FileOutputStream(filePath,true)) {
-           byte[] buffer = coments.get(0).getBody().getBytes();
-           writeFile.write(buffer,0,buffer.length);
-        }
-        catch (IOException e){
-            System.out.println(e.getMessage());
-        }
-        return coments;
+        ArrayList<Comment> comments = jsonManager.getAllFromJson(getResponse(url + "/posts/" + maxPostId + "/comments").body(), Comments.class);
+        String nameFile = "user-" + userId + "-post-" + maxPostId + ".json";
+        jsonManager.createFileFromJson(comments, filePath + nameFile);
+        return comments;
     }
 
     public ArrayList<Post> getAllPostsFromUserId(long id) throws Exception {

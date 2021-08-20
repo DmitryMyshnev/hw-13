@@ -1,26 +1,26 @@
 package Comments;
 
-public class Coment {
-    private Long posId;
+public class Comment {
+    private Long postId;
     private Long id;
     private String name;
     private  String email;
     private String body;
 
-    public Coment(Long posId, Long id, String name, String email, String body) {
-        this.posId = posId;
+    public Comment(Long posId, Long id, String name, String email, String body) {
+        this.postId = posId;
         this.id = id;
         this.name = name;
         this.email = email;
         this.body = body;
     }
 
-    public Long getPosId() {
-        return posId;
+    public Long getPostId() {
+        return postId;
     }
 
-    public void setPosId(Long posId) {
-        this.posId = posId;
+    public void setPostId(Long postId) {
+        this.postId = postId;
     }
 
     public Long getId() {
@@ -54,4 +54,5 @@ public class Coment {
     public void setBody(String body) {
         this.body = body;
     }
+
 }
