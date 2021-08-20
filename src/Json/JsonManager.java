@@ -13,13 +13,13 @@ import java.util.List;
 
 public class JsonManager{
 
-    public <T> ArrayList<T> getAllFromJson(String json, Class clazz){
+    public <T> ArrayList<T> getAllFromJson(String json, Type type){
       // return   new Gson().fromJson(json, new TypeToken<ArrayList<T>>() {}.getType());
 
-        return  new Gson().fromJson(json, clazz.getGenericSuperclass());
+        return  new Gson().fromJson(json, type);
     }
-    public <T> T getUserFromJson(String json,Class clazz){
-        return new Gson().fromJson(json,clazz.getGenericSuperclass());
+    public <T> T getObjectFromJson(String json, Type type){
+        return  new Gson().fromJson(json,type);
     }
 
     public String ConvertUserToJson(Object o){

@@ -25,7 +25,7 @@ public class HttpClientManager {
         if (getMaxId() >= id) {
             return userList.stream().filter((x) -> x.getId() == id).findFirst().get();
         } else return null;*/
-        return  jsonManager.getUserFromJson(getResponse(url + "/" + id).body(),User.class);
+        return  jsonManager.getObjectFromJson(getResponse(url + "/users/" + id).body(),User.class);
     }
 
     public User getUserByUserName(String name) throws Exception {
