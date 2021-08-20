@@ -8,13 +8,10 @@ import java.util.ArrayList;
 
 public class Main {
     static final String url = "https://jsonplaceholder.typicode.com";
-    static final String urlForPost = "https://jsonplaceholder.typicode.com/posts/1";
-    static final String urlForUsersPost = "https://jsonplaceholder.typicode.com/users/1/posts";
-    public static void main(String[] args) throws Exception {
+
+    public static void main(String[] args) {
         HttpClientManager manager = new HttpClientManager(url);
-//       User user = manager.getUserByUserName("Bret");
-//        System.out.println(user.getName());
-        //  Long id = manager.getMaxId();
+
         User newUser = new User(0, "John",
                 "JohnWick",
                 " Wick@mail.com",
@@ -22,23 +19,25 @@ public class Main {
                 "+12124033990",
                 "onewallstreet.com",
                 new Company("onewallstreet", "Love going there for a coffee", "We have already covered basics of Functional"));
-          manager.getAllCommentsFromPostByUserId(5L);
-        //manager.updateUser(newUser);
-       // manager.postNewUser(newUser);
-         //System.out.println(manager.deleteUser());
-      /*  ArrayList<User> user = manager.getAllUsers();
-        for (User p : user) {
-            System.out.println(p.toString());
+//Task1.1 _______________________________
+        //manager.postNewUser(newUser);
+//Task1.2 _______________________________
+        //  manager.updateUser(newUser);
+//Task1.3 ________________________________
+        // System.out.println("Status Code: " + manager.deleteUser());
+//Task1.4 ________________________________
+        /*   ArrayList<User> user = manager.getAllUsers();
+        for (User u : user) {
+            System.out.println(u.toString());
         }*/
-        /*   ArrayList<Post> posts = manager.getAllPostsFromUserId(4);
-        for (Post p : posts) {
-            System.out.println(p.toString());
-        }*/
+//Task1.5 __________________________________
+        //System.out.println(manager.getUserById(2L).toString());
+//Task1.6 __________________________________
+        // System.out.println(manager.getUserByUserName("Samantha").toString());
+//Task2 ____________________________________
+        // manager.getAllCommentsFromPostByUserId(5L);
+//Task3 ____________________________________
+        //manager.getAllNotCompletedTaskByUserId(10L);
 
-         //List<User> user = manager.getAllUsers();
-
-      // System.out.println(manager.getUserByUserName("Samantha").toString());
-       //System.out.println(manager.getUserById(2).toString());
-        // System.out.println( manager.getMaxId().toString());
     }
 }

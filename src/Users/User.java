@@ -27,6 +27,9 @@ public class User {
         this.company = company;
     }
 
+    public User() {
+    }
+
     public long getId() {
         return id;
     }

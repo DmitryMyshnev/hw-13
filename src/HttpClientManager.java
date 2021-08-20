@@ -3,17 +3,18 @@ import Comments.Comments;
 import Json.JsonManager;
 import PostsByUser.Post;
 import PostsByUser.Posts;
+import TodoList.ToDos;
+import TodoList.TodoUserList;
 import Users.User;
 import Users.Users;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class HttpClientManager {
     private String url;
@@ -45,6 +46,46 @@ public class HttpClientManager {
         return jsonManager.getAllFromJson(getResponse(url + "/users").body(), Users.class);
     }
 
+
+
+    public int deleteUser() throws Exception {
+        String correctUrl = url + "/posts/1";
+        return getResponse(correctUrl).statusCode();
+    }
+
+    public void postNewUser(User user) throws Exception {
+        String json = jsonManager.ConvertUserToJson(user);
+        String correctUrl = url + "/users";
+        System.out.println(postResponse(correctUrl, json,"POST").body());
+    }
+
+    public void updateUser(User user) throws Exception {
+        String json = jsonManager.ConvertUserToJson(user);
+        String correctUrl = url + "/posts/1";
+        System.out.println(postResponse(correctUrl,json,"PUT").body());
+    }
+
+    public ArrayList<Comment> getAllCommentsFromPostByUserId(Long userId) throws Exception {
+        ArrayList<Post> posts = getAllPostsByUserId(userId);
+        Long maxPostId = posts.stream().max(Post::compare).get().getId();
+        ArrayList<Comment> comments = jsonManager.getAllFromJson(getResponse(url + "/posts/" + maxPostId + "/comments").body(), Comments.class);
+        String nameFile = "user-" + userId + "-post-" + maxPostId + ".json";
+        jsonManager.createFileFromJson(comments, filePath + nameFile);
+        return comments;
+    }
+
+    public ArrayList<Post> getAllPostsByUserId(long userId) throws Exception {
+        return jsonManager.getAllFromJson(getResponse(url + "/users/" + userId + "/posts").body(), Posts.class);
+    }
+
+    public List<TodoUserList> getAllNotCompletedTaskByUserId(Long userId) throws Exception {
+        List<TodoUserList> todoUserLists = jsonManager.getAllFromJson(getResponse(url + "/users/" + userId + "/todos").body(), ToDos.class);
+        List<TodoUserList> lists = todoUserLists.stream().filter((x) -> x.isCompleted() == false).collect(Collectors.toList());
+        for (TodoUserList list : lists) {
+            System.out.println(list.toString());
+        }
+        return lists;
+    }
     private HttpResponse<String> getResponse(String url) throws Exception {
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
@@ -53,56 +94,13 @@ public class HttpClientManager {
         return client.send(request, HttpResponse.BodyHandlers.ofString());
     }
 
-    protected Long getMaxId() throws Exception {
-        List<User> users = getAllUsers();
-        return users.stream().max(User::compare).get().getId();
-    }
-
-    public int deleteUser() throws Exception {
-        HttpClient client = HttpClient.newHttpClient();
-        String correctUrl = url + "/posts/1";
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(correctUrl))
-                .DELETE().build();
-        HttpResponse<String> resp = client.send(request, HttpResponse.BodyHandlers.ofString());
-        return resp.statusCode();
-    }
-
-    public void postNewUser(User user) throws Exception {
-        String json = jsonManager.ConvertUserToJson(user);
-        String correctUrl = url + "/users";
+    private HttpResponse<String> postResponse(String url, String json,String method) throws Exception {
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(correctUrl))
+                .uri(URI.create(url))
                 .header("Content-Type", "application/json")
-                .POST(HttpRequest.BodyPublishers.ofString(json)).build();
-        HttpResponse<String> resp = client.send(request, HttpResponse.BodyHandlers.ofString());
-        System.out.println(resp.body());
-    }
-
-    public void updateUser(User user) throws Exception {
-        String json = jsonManager.ConvertUserToJson(user);
-        String correctUrl = url + "/posts/1";
-        HttpClient client = HttpClient.newHttpClient();
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(correctUrl))
-                .header("Content-Type", "application/json")
-                .PUT(HttpRequest.BodyPublishers.ofString(json)).build();
-        HttpResponse<String> resp = client.send(request, HttpResponse.BodyHandlers.ofString());
-        System.out.println(resp.body());
-    }
-
-    public ArrayList<Comment> getAllCommentsFromPostByUserId(Long userId) throws Exception {
-        ArrayList<Post> posts = getAllPostsFromUserId(userId);
-        Long maxPostId = posts.stream().max(Post::compare).get().getId();
-        ArrayList<Comment> comments = jsonManager.getAllFromJson(getResponse(url + "/posts/" + maxPostId + "/comments").body(), Comments.class);
-        String nameFile = "user-" + userId + "-post-" + maxPostId + ".json";
-        jsonManager.createFileFromJson(comments, filePath + nameFile);
-        return comments;
-    }
-
-    public ArrayList<Post> getAllPostsFromUserId(long id) throws Exception {
-        return jsonManager.getAllFromJson(getResponse(url + "/users/" + id + "/posts").body(), Posts.class);
+                .method(method, HttpRequest.BodyPublishers.ofString(json)).build();
+        return client.send(request, HttpResponse.BodyHandlers.ofString());
     }
 
 }
