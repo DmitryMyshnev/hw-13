@@ -1,10 +1,8 @@
-import PostsByUser.Post;
+
 import Users.Address;
 import Users.Company;
 import Users.Geo;
 import Users.User;
-
-import java.util.ArrayList;
 
 public class Main {
     static final String url = "https://jsonplaceholder.typicode.com";

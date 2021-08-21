@@ -17,9 +17,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class HttpClientManager {
-    private String url;
+    private final String url;
     JsonManager jsonManager;
-    private String filePath;
+    private final String filePath;
 
     public HttpClientManager(String url) {
         this.url = url;
@@ -79,7 +79,7 @@ public class HttpClientManager {
 
     public List<TodoUserList> getAllNotCompletedTaskByUserId(Long userId) throws Exception {
         List<TodoUserList> todoUserLists = jsonManager.getAllFromJson(getResponse(url + "/users/" + userId + "/todos").body(), ToDos.class);
-        List<TodoUserList> lists = todoUserLists.stream().filter((x) -> x.isCompleted() == false).collect(Collectors.toList());
+        List<TodoUserList> lists = todoUserLists.stream().filter((x) -> !x.isCompleted()).collect(Collectors.toList());
         for (TodoUserList list : lists) {
             System.out.println(list.toString());
         }
