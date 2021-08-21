@@ -24,7 +24,7 @@ public class Main {
 //Task1.2 _______________________________
         //  manager.updateUser(newUser);
 //Task1.3 ________________________________
-        System.out.println("Status Code: " + manager.deleteUser());
+        //System.out.println("Status Code: " + manager.deleteUser());
 //Task1.4 ________________________________
         /*   ArrayList<User> user = manager.getAllUsers();
         for (User u : user) {
