@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class Main {
     static final String url = "https://jsonplaceholder.typicode.com";
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         HttpClientManager manager = new HttpClientManager(url);
 
         User newUser = new User(0, "John",
@@ -24,7 +24,7 @@ public class Main {
 //Task1.2 _______________________________
         //  manager.updateUser(newUser);
 //Task1.3 ________________________________
-        // System.out.println("Status Code: " + manager.deleteUser());
+        System.out.println("Status Code: " + manager.deleteUser());
 //Task1.4 ________________________________
         /*   ArrayList<User> user = manager.getAllUsers();
         for (User u : user) {

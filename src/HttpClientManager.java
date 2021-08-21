@@ -49,7 +49,7 @@ public class HttpClientManager {
 
     public int deleteUser() throws Exception {
         String correctUrl = url + "/posts/1";
-        return getResponse(correctUrl).statusCode();
+        return postResponse(correctUrl,"","DELETE").statusCode();
     }
 
     public void postNewUser(User user) throws Exception {
